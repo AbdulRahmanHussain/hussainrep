@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Mark List</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f2f6fc;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e3a8a;
+            margin-bottom: 25px;
+        }
+
+        .form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            grid-column: span 2;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .pass {
+            color: green;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: red;
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+            .form {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                grid-column: span 1;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 7px;
+            }
+        }
+    
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+   <marquee> <h1>Student Mark List</h1></marquee>
+    
+    <div class="form">
+        <input type="text" id="name" placeholder="Student Name">
+        <input type="text" id="roll" placeholder="Roll Number">
+
+        <input type="number" id="tamil" placeholder="Tamil Marks" min="0" max="100">
+        <input type="number" id="english" placeholder="English Marks" min="0" max="100">
+
+        <input type="number" id="maths" placeholder="Maths Marks" min="0" max="100">
+        <input type="number" id="science" placeholder="Science Marks" min="0" max="100">
+
+        <input type="number" id="social" placeholder="Social Marks" min="0" max="100">
+
+        <button onclick="addStudent()">Add Student</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+            \
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Total</th>
+                <th>Average</th>
+                <th>Grade</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+
+        <tbody id="studentTable">
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+
+    let count = 0;
+
+    function addStudent() {
+
+        let name = document.getElementById("name").value;
+        let roll = document.getElementById("roll").value;
+
+        let tamil = Number(document.getElementById("tamil").value);
+        let english = Number(document.getElementById("english").value);
+        let maths = Number(document.getElementById("maths").value);
+        let science = Number(document.getElementById("science").value);
+        let social = Number(document.getElementById("social").value);
+
+        // Check empty fields
+        if (
+            name === "" ||
+            roll === "" ||
+            document.getElementById("tamil").value === "" ||
+            document.getElementById("english").value === "" ||
+            document.getElementById("maths").value === "" ||
+            document.getElementById("science").value === "" ||
+            document.getElementById("social").value === ""
+        ) {
+            alert("Please enter all details!");
+            return;
+        }
+
+        // Calculate total
+        let total = tamil + english + maths + science + social;
+
+        // Calculate average
+        let average = total / 5;
+
+        // Check result
+        let result;
+
+        if (
+            tamil < 35 ||
+            english < 35 ||
+            maths < 35 ||
+            science < 35 ||
+            social < 35
+        ) {
+            result = "Fail";
+        } else {
+            result = "Pass";
+        }
+
+        // Calculate grade
+        let grade;
+
+        if (result === "Fail") {
+            grade = "F";
+        } else if (average >= 90) {
+            grade = "A+";
+        } else if (average >= 80) {
+            grade = "A";
+        } else if (average >= 70) {
+            grade = "B";
+        } else if (average >= 60) {
+            grade = "C";
+        } else if (average >= 50) {
+            grade = "D";
+        } else {
+            grade = "E";
+        }
+
+        count++;
+
+        // Create table row
+        let table = document.getElementById("studentTable");
+
+        let row = table.insertRow();
+
+        row.innerHTML = `
+            <td>${count}</td>
+            <td>${name}</td>
+            <td>${roll}</td>
+            <td>${total}</td>
+            <td>${average.toFixed(2)}%</td>
+            <td>${grade}</td>
+            <td class="${result === "Pass" ? "pass" : "fail"}">
+                ${result}
+            </td>
+        `;
+
+        // Clear inputs
+        document.getElementById("name").value = "";
+        document.getElementById("roll").value = "";
+        document.getElementById("tamil").value = "";
+        document.getElementById("english").value = "";
+        document.getElementById("maths").value = "";
+        document.getElementById("science").value = "";
+        document.getElementById("social").value = "";
+    }
+
+</script>
+
+</body>
+</html>
