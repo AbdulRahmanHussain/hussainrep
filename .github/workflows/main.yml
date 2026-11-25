@@ -1,0 +1,11 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run CI Check
+        run: echo "CI Setup Successful!"
